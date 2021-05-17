@@ -76,19 +76,19 @@ export default class AppVersionTable extends Component<{
                 dataIndex: 'deployedImageName' as 'deployedImageName',
             },
             {
-                title: 'git hash',
-                dataIndex: 'gitHash' as 'gitHash',
+                title: 'VCS hash',
+                dataIndex: 'vcsHash' as 'vcsHash',
                 render: (
-                    gitHashOriginal: string,
+                    vcsHashOriginal: string,
                     versionDetails: IAppVersion
                 ) => {
-                    let gitHash = gitHashOriginal || ''
-                    if (gitHash.length > 12) {
-                        gitHash = gitHash.substr(0, 10) + '...'
+                    let vcsHash = vcsHashOriginal || ''
+                    if (vcsHash.length > 12) {
+                        vcsHash = vcsHash.substr(0, 10) + '...'
                     }
                     return (
-                        <Tooltip title={gitHashOriginal}>
-                            <div className="code-input">{gitHash || 'n/a'}</div>
+                        <Tooltip title={vcsHashOriginal}>
+                            <div className="code-input">{vcsHash || 'n/a'}</div>
                         </Tooltip>
                     )
                 },
@@ -175,7 +175,7 @@ export default class AppVersionTable extends Component<{
                                         </div>
                                         <div>
                                             <b>Git hash:</b>{' '}
-                                            {version.gitHash || 'n/a'}
+                                            {version.vcsHash || 'n/a'}
                                         </div>
                                         <div>
                                             <b>State:</b>{' '}

@@ -162,7 +162,7 @@ export default class ApiManager {
     uploadCaptainDefinitionContent(
         appName: string,
         captainDefinition: ICaptainDefinition,
-        gitHash: string,
+        vcsHash: string,
         detached: boolean
     ) {
         const http = this.http
@@ -178,7 +178,7 @@ export default class ApiManager {
                         captainDefinitionContent: JSON.stringify(
                             captainDefinition
                         ),
-                        gitHash,
+                        vcsHash,
                     }
                 )
             )

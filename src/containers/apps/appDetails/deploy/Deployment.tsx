@@ -1,5 +1,5 @@
 import { RocketOutlined } from '@ant-design/icons'
-import { Button, Col, Input, message, Row, Tooltip } from 'antd'
+import { Modal, Button, Col, Input, message, Row, Tooltip, Select } from 'antd'
 import deepEqual from 'deep-equal'
 import React from 'react'
 import DomUtils from '../../../../utils/DomUtils'
@@ -7,12 +7,12 @@ import Toaster from '../../../../utils/Toaster'
 import Utils from '../../../../utils/Utils'
 import ApiComponent from '../../../global/ApiComponent'
 import NewTabLink from '../../../global/NewTabLink'
-import { IAppDef, IAppVersion, RepoInfo } from '../../AppDefinition'
+import { IAppDef, IAppVersion, RepoType, RepoInfo } from '../../AppDefinition'
 import { AppDetailsTabProps } from '../AppDetails'
 import AppLogsView from './AppLogsView'
 import AppVersionTable from './AppVersionTable'
 import BuildLogsView from './BuildLogsView'
-import GitRepoForm from './GitRepoForm'
+import RepoForm from './RepoForm'
 import TarUploader from './TarUploader'
 import UploaderPlainTextCaptainDefinition from './UploaderPlainTextCaptainDefinition'
 import UploaderPlainTextDockerfile from './UploaderPlainTextDockerfile'
@@ -30,6 +30,7 @@ export default class Deployment extends ApiComponent<
     }
 > {
     initRepoInfo: RepoInfo
+    needRepoType: RepoType
 
     constructor(props: AppDetailsTabProps) {
         super(props)
@@ -44,12 +45,14 @@ export default class Deployment extends ApiComponent<
         this.initRepoInfo = appPushWebhook
             ? { ...appPushWebhook.repoInfo }
             : {
+                  type: RepoType.git,
                   user: '',
                   password: '',
                   branch: '',
                   sshKey: '',
                   repo: '',
               }
+        this.needRepoType = this.initRepoInfo.type;
     }
 
     onUploadSuccess() {
@@ -97,7 +100,7 @@ export default class Deployment extends ApiComponent<
                     // If we use that, and the image is not available, the service will not work.
                     dockerfileLines: [`FROM ${version.deployedImageName}`],
                 },
-                version.gitHash || '',
+                version.vcsHash || '',
                 true
             )
             .then(function () {
@@ -111,16 +114,23 @@ export default class Deployment extends ApiComponent<
         const app = this.props.apiData.appDefinition
         const hasPushToken =
             app.appPushWebhook && app.appPushWebhook.pushWebhookToken
-        const repoInfo = app.appPushWebhook
-            ? app.appPushWebhook.repoInfo
-            : {
-                  user: '',
-                  password: '',
-                  branch: '',
-                  sshKey: '',
-                  repo: '',
-              }
 
+        const repoInfoDef = {
+          type: this.needRepoType,
+          user: '',
+          password: '',
+          branch: '',
+          sshKey: '',
+          repo: '',
+        }
+        var repoInfo = app.appPushWebhook
+            ? app.appPushWebhook.repoInfo
+            : repoInfoDef
+        if (this.needRepoType != repoInfo.type) {
+          repoInfo = repoInfoDef
+        }
+        console.log(repoInfo.type)
+ 
         const webhookPushUrlRelativePath = hasPushToken
             ? `/user/apps/webhooks/triggerbuild?namespace=captain&token=${
                   app.appPushWebhook!.pushWebhookToken
@@ -193,13 +203,42 @@ export default class Deployment extends ApiComponent<
 
                 <div style={{ height: 40 }} />
                 <h4>
-                    <RocketOutlined /> Method 3: Deploy from
-                    Github/Bitbucket/Gitlab
+                    <RocketOutlined /> Method 3: Deploy from <span/>
+                    <Select 
+                      value={repoInfo.type}
+                      style={{ width: 100 }} 
+                      onChange={(v) => {
+                        Modal.confirm({
+                          title: 'Change the VCS',
+                          content: (
+                              <div>
+                                  <p>
+                                      You will move on {v} version control, <br/>
+                                      and lost any previous parameters set...
+                                  </p>
+                                  <p>
+                                      Are you sure ?
+                                  </p>
+                              </div>
+                          ),
+                          onOk() {
+                            self.needRepoType = v as RepoType
+                            self.forceUpdate()
+                          },
+                          onCancel() {
+                            self.forceUpdate()
+                          }
+                        })
+                      }}>
+                      <Select.Option value="git">git</Select.Option>
+                      <Select.Option value="fossil">fossil</Select.Option>
+                    </Select>
+                    
                 </h4>
                 <p>
                     Enter your repository information in the form and save. Then
                     copy the URL in the box as a webhook on Github, Bitbucket,
-                    Gitlab and etc. Once you push a commit, CapRover starts a
+                    Gitlab or as afterhook. Once you push a commit, CapRover starts a
                     new build.
                     <br />
                 </p>
@@ -223,8 +262,8 @@ export default class Deployment extends ApiComponent<
                     />
                 </Row>
                 <br />
-                <GitRepoForm
-                    gitRepoValues={repoInfo}
+                <RepoForm 
+                    repoValues={repoInfo}
                     updateRepoInfo={(newRepo) => {
                         const newApiData = Utils.copyObject(this.props.apiData)
                         if (newApiData.appDefinition.appPushWebhook) {
@@ -242,6 +281,7 @@ export default class Deployment extends ApiComponent<
                 <Row
                     justify="end"
                     style={{ marginTop: this.props.isMobile ? 15 : 0 }}
+
                 >
                     <Button
                         disabled={!hasPushToken}
@@ -268,6 +308,7 @@ export default class Deployment extends ApiComponent<
                         Save &amp; Update
                     </Button>
                 </Row>
+
                 <div style={{ height: 20 }} />
                 <h4>
                     <RocketOutlined /> Method 4: Deploy plain Dockerfile
@@ -373,3 +414,5 @@ export default class Deployment extends ApiComponent<
         )
     }
 }
+
+

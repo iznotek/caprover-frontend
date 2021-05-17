@@ -4,11 +4,31 @@ import Utils from '../../../../utils/Utils'
 import PasswordField from '../../../global/PasswordField'
 import { RepoInfo } from '../../AppDefinition'
 
-export default class GitRepoForm extends Component<{
-    gitRepoValues: RepoInfo
+export default class RepoForm extends Component<{
+    repoValues: RepoInfo
     updateRepoInfo: (newRepoInfo: RepoInfo) => void
 }> {
+    getPlaceHolder() {
+        switch(this.props.repoValues.type){
+            case 'git': 
+            return {
+                repo: "github.com/someone/something",
+                branch: "master",
+                user: "myemail@gmail.com",
+                password: "githubpassword"
+            }
+            case 'fossil': 
+            default:
+            return {
+                repo: "https://www.fossil-scm.org",
+                branch: "trunk",
+                user: "whoami",
+                password: "fossilpassword"
+            }
+        }
+    }
     render() {
+        const placeholders = this.getPlaceHolder();
         return (
             <div>
                 <form action="/" autoComplete="off">
@@ -16,9 +36,9 @@ export default class GitRepoForm extends Component<{
                         <Col xs={{ span: 24 }} lg={{ span: 12 }}>
                             <Input
                                 style={{ marginBottom: 20 }}
-                                value={this.props.gitRepoValues.repo}
+                                value={this.props.repoValues.repo}
                                 addonBefore="Repository"
-                                placeholder="github.com/someone/something"
+                                placeholder={placeholders.repo}
                                 type="url"
                                 spellCheck={false}
                                 autoCorrect="off"
@@ -26,7 +46,7 @@ export default class GitRepoForm extends Component<{
                                 autoCapitalize="off"
                                 onChange={(e) => {
                                     const newObj = Utils.copyObject(
-                                        this.props.gitRepoValues
+                                        this.props.repoValues
                                     )
                                     newObj.repo = e.target.value
                                     this.props.updateRepoInfo(newObj)
@@ -36,11 +56,11 @@ export default class GitRepoForm extends Component<{
                         <Col xs={{ span: 24 }} lg={{ span: 12 }}>
                             <Input
                                 style={{ marginBottom: 20 }}
-                                value={this.props.gitRepoValues.branch}
+                                value={this.props.repoValues.branch}
                                 addonBefore={
                                     <span>Branch&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                 }
-                                placeholder="master"
+                                placeholder={placeholders.branch}
                                 type="text"
                                 spellCheck={false}
                                 autoCorrect="off"
@@ -48,7 +68,7 @@ export default class GitRepoForm extends Component<{
                                 autoCapitalize="off"
                                 onChange={(e) => {
                                     const newObj = Utils.copyObject(
-                                        this.props.gitRepoValues
+                                        this.props.repoValues
                                     )
                                     newObj.branch = e.target.value
                                     this.props.updateRepoInfo(newObj)
@@ -59,20 +79,20 @@ export default class GitRepoForm extends Component<{
                             xs={{ span: 24 }}
                             lg={{ span: 12 }}
                             className={
-                                this.props.gitRepoValues.sshKey
+                                this.props.repoValues.sshKey
                                     ? 'hide-on-demand'
                                     : ''
                             }
                         >
                             <Input
                                 style={{ marginBottom: 20 }}
-                                value={this.props.gitRepoValues.user}
+                                value={this.props.repoValues.user}
                                 addonBefore={<span>Username&nbsp;</span>}
-                                placeholder="myemail@gmail.com"
+                                placeholder={placeholders.user}
                                 type="email"
                                 onChange={(e) => {
                                     const newObj = Utils.copyObject(
-                                        this.props.gitRepoValues
+                                        this.props.repoValues
                                     )
                                     newObj.user = e.target.value
                                     this.props.updateRepoInfo(newObj)
@@ -83,18 +103,18 @@ export default class GitRepoForm extends Component<{
                             xs={{ span: 24 }}
                             lg={{ span: 12 }}
                             className={
-                                this.props.gitRepoValues.sshKey
+                                this.props.repoValues.sshKey
                                     ? 'hide-on-demand'
                                     : ''
                             }
                         >
                             <PasswordField
-                                defaultValue={this.props.gitRepoValues.password}
+                                defaultValue={this.props.repoValues.password}
                                 addonBefore="Password"
-                                placeholder="githubpassword"
+                                placeholder={placeholders.password}
                                 onChange={(e) => {
                                     const newObj = Utils.copyObject(
-                                        this.props.gitRepoValues
+                                        this.props.repoValues
                                     )
                                     newObj.password = e.target.value
                                     this.props.updateRepoInfo(newObj)
@@ -108,13 +128,13 @@ export default class GitRepoForm extends Component<{
                             <Input.TextArea
                                 style={{ marginBottom: 20 }}
                                 rows={4}
-                                value={this.props.gitRepoValues.sshKey}
+                                value={this.props.repoValues.sshKey}
                                 placeholder={
                                     '-----BEGIN RSA PRIVATE KEY-----\nAABBBCCC'
                                 }
                                 onChange={(e) => {
                                     const newObj = Utils.copyObject(
-                                        this.props.gitRepoValues
+                                        this.props.repoValues
                                     )
                                     newObj.sshKey = e.target.value
                                     if (newObj.sshKey) {
