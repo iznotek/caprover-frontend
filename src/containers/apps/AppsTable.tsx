@@ -103,7 +103,7 @@ class AppsTable extends Component<
                                 <LoadingOutlined
                                     style={{
                                         fontSize: '12px',
-                                        paddingLeft: 12,
+                                        marginLeft: 12,
                                     }}
                                 />
                             ) : undefined}
@@ -177,7 +177,9 @@ class AppsTable extends Component<
                 type="text"
                 onChange={(event) =>
                     self.setState({
-                        searchTerm: (event.target.value || '').trim(),
+                        searchTerm: (event.target.value || '')
+                            .trim()
+                            .toLowerCase(),
                     })
                 }
             />

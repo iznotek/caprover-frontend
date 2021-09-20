@@ -1,7 +1,7 @@
 import { Card, Col, message, Row } from 'antd'
-import queryString from 'query-string'
-import React from 'react'
+import ReactMarkdown from 'react-markdown'
 import { RouteComponentProps } from 'react-router'
+import gfm from 'remark-gfm'
 import { IOneClickTemplate } from '../../../../models/IOneClickAppModels'
 import DomUtils from '../../../../utils/DomUtils'
 import Toaster from '../../../../utils/Toaster'
@@ -60,21 +60,22 @@ export default class OneClickAppConfigPage extends ApiComponent<
         const self = this
 
         const appNameFromPath = this.props.match.params.appName
-        const baseDomainFromPath =
-            queryString.parse(self.props.location.search)['baseDomain'] + ''
+        const qs = new URLSearchParams(self.props.location.search)
+        const baseDomainFromPath = qs.get('baseDomain')
         let promiseToFetchOneClick =
             appNameFromPath === TEMPLATE_ONE_CLICK_APP
                 ? new Promise<any>(function (resolve) {
                       resolve(
                           JSON.parse(
-                              queryString.parse(self.props.location.search)[
-                                  ONE_CLICK_APP_STRINGIFIED_KEY
-                              ] as string
+                              qs.get(ONE_CLICK_APP_STRINGIFIED_KEY) as string
                           )
                       )
                   })
                 : self.apiManager
-                      .getOneClickAppByName(appNameFromPath, baseDomainFromPath)
+                      .getOneClickAppByName(
+                          appNameFromPath,
+                          baseDomainFromPath as string
+                      )
                       .then(function (data) {
                           return data.appTemplate
                       })
@@ -156,12 +157,17 @@ export default class OneClickAppConfigPage extends ApiComponent<
                             <h2>{displayName}</h2>
                             <p
                                 style={{
-                                    whiteSpace: 'pre-line',
+                                    whiteSpace: 'pre-wrap',
                                     paddingLeft: 15,
                                     paddingRight: 15,
                                 }}
                             >
-                                {apiData.caproverOneClickApp.instructions.start}
+                                <ReactMarkdown remarkPlugins={[gfm]}>
+                                    {
+                                        apiData.caproverOneClickApp.instructions
+                                            .start
+                                    }
+                                </ReactMarkdown>
                             </p>
                             <div style={{ height: 40 }} />
                             <OneClickVariablesSection
@@ -172,9 +178,8 @@ export default class OneClickAppConfigPage extends ApiComponent<
                                     const template = Utils.copyObject(
                                         self.state.apiData!
                                     )
-                                    const valuesAugmented = Utils.copyObject(
-                                        values
-                                    )
+                                    const valuesAugmented =
+                                        Utils.copyObject(values)
 
                                     template.caproverOneClickApp.variables.push(
                                         {

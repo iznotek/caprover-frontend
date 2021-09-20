@@ -1,5 +1,4 @@
 import { Button, Card, Col, Input, Modal, Row, Tooltip } from 'antd'
-import queryString from 'query-string'
 import React from 'react'
 import { Redirect, RouteComponentProps } from 'react-router'
 import AppConstants from '../utils/AppConstants'
@@ -263,11 +262,11 @@ export default class Dashboard extends ApiComponent<
             return <ErrorRetry />
         }
 
+        const qs = new URLSearchParams(self.props.location.search)
+
         if (
             !!this.state.apiData.forceSsl &&
-            !!queryString.parse(self.props.location.search)[
-                AppConstants.REDIRECT_TO_APPS_IF_READY_REQ_PARAM
-            ]
+            !!qs.get(AppConstants.REDIRECT_TO_APPS_IF_READY_REQ_PARAM)
         ) {
             return <Redirect to="/apps" />
         }
@@ -459,10 +458,10 @@ export default class Dashboard extends ApiComponent<
                                 You have installed and set CapRover up
                                 successfully! You can now deploy your apps!
                                 Remember, with CapRover, you can deploy
-                                applications from source code (such as NodeJS,
-                                php, java, Ruby, python etc...), and you can
-                                also deploy ready to go applications such as
-                                MySQL, MongoDB, WordPress, Redis, and many more!
+                                applications from source code (such as Node.js,
+                                PHP, Java, Ruby, Python etc), and you can also
+                                deploy ready to go applications such as MySQL,
+                                MongoDB, WordPress, Redis, and many more!
                             </p>
 
                             <p>
@@ -475,7 +474,7 @@ export default class Dashboard extends ApiComponent<
                                     rel="noopener noreferrer"
                                 >
                                     {' '}
-                                    sample apps
+                                    sample apps.
                                 </a>
                             </p>
 
