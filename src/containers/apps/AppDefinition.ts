@@ -48,6 +48,7 @@ interface RepoInfoEncrypted {
 export interface IAppVersion {
     version: number
     deployedImageName?: string // empty if the deploy is not completed
+    deployedDockerFile?: string
     timeStamp: string
     vcsHash: string | undefined
 }
@@ -71,6 +72,7 @@ interface IAppDefinitionBase {
         passwordHashed?: string
     }
     captainDefinitionRelativeFilePath: string
+    buildNoCache: boolean
 
     forceSsl: boolean
     websocketSupport: boolean

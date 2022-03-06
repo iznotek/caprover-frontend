@@ -6,6 +6,7 @@ import ApiComponent from '../../../global/ApiComponent'
 export default abstract class UploaderPlainTextBase extends ApiComponent<
     {
         appName: string
+        text?: string
         onUploadSucceeded: () => void
     },
     {
@@ -16,7 +17,7 @@ export default abstract class UploaderPlainTextBase extends ApiComponent<
     constructor(props: any) {
         super(props)
         this.state = {
-            userEnteredValue: '',
+            userEnteredValue: this.props.text || '',
             uploadInProcess: false,
         }
     }
@@ -61,7 +62,7 @@ export default abstract class UploaderPlainTextBase extends ApiComponent<
                 <Input
                     className="code-input"
                     placeholder={self.getPlaceHolderValue()}
-                    value={self.state.userEnteredValue}
+                    value={self.props.text || self.state.userEnteredValue}
                     onChange={(e) => {
                         self.setState({
                             userEnteredValue: e.target.value,
@@ -76,7 +77,7 @@ export default abstract class UploaderPlainTextBase extends ApiComponent<
                 className="code-input"
                 placeholder={self.getPlaceHolderValue()}
                 rows={7}
-                value={self.state.userEnteredValue}
+                value={self.props.text ||self.state.userEnteredValue}
                 onChange={(e) => {
                     self.setState({
                         userEnteredValue: e.target.value,
@@ -89,7 +90,7 @@ export default abstract class UploaderPlainTextBase extends ApiComponent<
     render() {
         const self = this
         return (
-            <div style={{ padding: 16 }}>
+            <div style={{ padding: 0 }}>
                 <Row>{self.createTextArea()}</Row>
                 <div style={{ height: 20 }} />
                 <Row justify="end">

@@ -5,6 +5,7 @@ import {
 } from '@ant-design/icons'
 import { Card, Modal, Table, Tooltip } from 'antd'
 import { ColumnProps } from 'antd/lib/table'
+import { Console } from 'console'
 import moment from 'moment'
 import React, { Component, Fragment } from 'react'
 import Utils from '../../../../utils/Utils'
@@ -16,6 +17,7 @@ export default class AppVersionTable extends Component<{
     versions: IAppVersion[]
     deployedVersion: number
     onVersionRollbackRequested: (versionToRevert: IAppVersion) => void
+    onVersionSelected: (version: IAppVersion) => void
     isMobile: boolean
 }> {
     getStateRender(version: number, versionDetails: IAppVersion) {
@@ -194,6 +196,14 @@ export default class AppVersionTable extends Component<{
                             pagination={{ pageSize: 5 }}
                             columns={columns}
                             dataSource={versionsReversed}
+                            onRow={(record, rowIndex) => {
+                                const self = this
+                                return {
+                                  onClick: event => {
+                                    self.props.onVersionSelected(record)
+                                  }, 
+                                };
+                            }}
                         />
                     )}
                 </div>

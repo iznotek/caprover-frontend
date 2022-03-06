@@ -58,12 +58,12 @@ class AppsTable extends Component<
                 sortDirections: ['descend', 'ascend'],
             },
             {
-                title: 'Persistent Data	',
-                dataIndex: 'hasPersistentData',
-                key: 'hasPersistentData',
+                title: 'Running	',
+                dataIndex: 'enabled',
+                key: 'enabled',
                 align: ALIGN,
-                render: (hasPersistentData: boolean) => {
-                    if (!hasPersistentData) {
+                render: (enabled: boolean) => {
+                    if (!enabled) {
                         return <span />
                     }
 
@@ -79,6 +79,23 @@ class AppsTable extends Component<
                 dataIndex: 'instanceCount',
                 key: 'instanceCount',
                 align: ALIGN,
+            },
+            {
+                title: 'Persistent Data	',
+                dataIndex: 'hasPersistentData',
+                key: 'hasPersistentData',
+                align: ALIGN,
+                render: (hasPersistentData: boolean) => {
+                    if (!hasPersistentData) {
+                        return <span />
+                    }
+
+                    return (
+                        <span>
+                            <CheckOutlined />
+                        </span>
+                    )
+                },
             },
             {
                 title: 'Last Deployed',
@@ -214,6 +231,7 @@ class AppsTable extends Component<
                                 appsToRender.map(
                                     ({
                                         appName = '',
+                                        enabled,
                                         hasPersistentData,
                                         notExposeAsWebApp,
                                         instanceCount,
@@ -238,16 +256,8 @@ class AppsTable extends Component<
                                             }}
                                         >
                                             <p>
-                                                Persistent Data:{' '}
-                                                {!hasPersistentData ? undefined : (
-                                                    <span>
-                                                        <CheckOutlined />
-                                                    </span>
-                                                )}
-                                            </p>
-                                            <p>
-                                                Exposed Webapp:{' '}
-                                                {!!notExposeAsWebApp ? undefined : (
+                                                Running: {' '}
+                                                {!enabled ? undefined : (
                                                     <span>
                                                         <CheckOutlined />
                                                     </span>
@@ -255,6 +265,14 @@ class AppsTable extends Component<
                                             </p>
                                             <p>
                                                 Instance Count: {instanceCount}
+                                            </p>
+                                            <p>
+                                                Persistent Data:{' '}
+                                                {!hasPersistentData ? undefined : (
+                                                    <span>
+                                                        <CheckOutlined />
+                                                    </span>
+                                                )}
                                             </p>
                                             <p>
                                                 Open in Browser:{' '}
