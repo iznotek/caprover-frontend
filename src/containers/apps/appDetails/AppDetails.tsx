@@ -1,6 +1,8 @@
 import {
     CloseOutlined,
     DeleteOutlined,
+    StepForwardOutlined,
+    PauseOutlined,
     EditOutlined,
     ReadOutlined,
     SaveOutlined,
@@ -302,6 +304,21 @@ class AppDetails extends ApiComponent<
             })
     }
 
+    onToggleAppRunningState() {
+        const self = this
+        const appDef = Utils.copyObject(self.state.apiData!.appDefinition)
+        self.setState({ isLoading: true })
+        this.apiManager
+            .toggleApp(appDef.appName!)
+            .then(function () {
+                return self.reFetchData()
+            })
+            .catch(Toaster.createCatcher())
+            .then(function () {
+                self.setState({ isLoading: false })
+            })
+    }
+
     onUpdateConfigAndSave() {
         const self = this
         const appDef = Utils.copyObject(self.state.apiData!.appDefinition)
@@ -529,6 +546,29 @@ class AppDetails extends ApiComponent<
                                                 ) : (
                                                     'Delete App'
                                                 )}
+                                            </Button>
+                                        </div>
+                                    </Col>
+                                    <Col span={8}>
+                                        <div style={{ textAlign: 'center' }}>
+                                            <Button
+                                                style={{
+                                                    minWidth: self.props
+                                                        .isMobile
+                                                        ? 35
+                                                        : 135,
+                                                }}
+                                                type="primary"
+                                                size="large"
+                                                shape="round"
+                                                onClick={() =>
+                                                    self.onToggleAppRunningState()
+                                                }
+                                                icon={app.enabled ? ( <PauseOutlined /> ) : (<StepForwardOutlined />)}
+                                            >
+                                                {!self.props.isMobile ? (
+                                                    <> {app.enabled ? ( 'Stop' ) : ( 'Run' )} </>
+                                                ):null}
                                             </Button>
                                         </div>
                                     </Col>

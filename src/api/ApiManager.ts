@@ -195,6 +195,7 @@ export default class ApiManager {
         let instanceCount = appDefinition.instanceCount
         let captainDefinitionRelativeFilePath =
             appDefinition.captainDefinitionRelativeFilePath
+        let buildNoCache = appDefinition.buildNoCache
         let envVars = appDefinition.envVars
         let notExposeAsWebApp = appDefinition.notExposeAsWebApp
         let forceSsl = appDefinition.forceSsl
@@ -219,6 +220,7 @@ export default class ApiManager {
                     instanceCount: instanceCount,
                     captainDefinitionRelativeFilePath:
                         captainDefinitionRelativeFilePath,
+                    buildNoCache: buildNoCache,
                     notExposeAsWebApp: notExposeAsWebApp,
                     forceSsl: forceSsl,
                     websocketSupport: websocketSupport,
@@ -234,6 +236,17 @@ export default class ApiManager {
                     httpAuth: httpAuth,
                     envVars: envVars,
                     appDeployTokenConfig: appDeployTokenConfig,
+                })
+            )
+    }
+
+    toggleApp(appName: string) {
+        const http = this.http
+
+        return Promise.resolve() //
+            .then(
+                http.fetch(http.POST, '/user/apps/appDefinitions/toggle', { 
+                    appName,
                 })
             )
     }
