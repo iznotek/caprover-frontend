@@ -121,31 +121,40 @@ export default class RepoForm extends Component<{
                                 }}
                             />
                         </Col>
-                        <Col span={24}>
-                            <span>
-                                Or, instead of username/password, use SSH Key:
-                            </span>
-                            <Input.TextArea
-                                style={{ marginBottom: 20 }}
-                                rows={4}
-                                value={this.props.repoValues.sshKey}
-                                placeholder={
-                                    '-----BEGIN RSA PRIVATE KEY-----\nAABBBCCC'
-                                }
-                                onChange={(e) => {
-                                    const newObj = Utils.copyObject(
-                                        this.props.repoValues
-                                    )
-                                    newObj.sshKey = e.target.value
-                                    if (newObj.sshKey) {
-                                        // Upon changing SSH key, we forcefully remove user/pass to inform the user that SSH will take priority
-                                        newObj.password = ''
-                                        newObj.user = ''
+      
+                        {this.props.repoValues.type == 'git' ? (
+                            <Col span={24}>
+                                <span>
+                                    Or, instead of username/password, use SSH Key:
+                                </span>
+                                <Input.TextArea
+                                    style={{ marginBottom: 20 }}
+                                    rows={4}
+                                    value={this.props.repoValues.sshKey}
+                                    placeholder={
+                                        '-----BEGIN RSA PRIVATE KEY-----\nAABBBCCC'
                                     }
-                                    this.props.updateRepoInfo(newObj)
-                                }}
-                            />
-                        </Col>
+                                    onChange={(e) => {
+                                        const newObj = Utils.copyObject(
+                                            this.props.repoValues
+                                        )
+                                        newObj.sshKey = e.target.value
+                                        if (newObj.sshKey) {
+                                            // Upon changing SSH key, we forcefully remove user/pass to inform the user that SSH will take priority
+                                            newObj.password = ''
+                                            newObj.user = ''
+                                        }
+                                        this.props.updateRepoInfo(newObj)
+                                    }}
+                                />
+                            </Col>
+                        ) : (
+                            <Col span={24}>
+                                <span>
+                                    SSH is not supported right now ...
+                                </span>
+                            </Col>
+                        )}
                     </Row>
                 </form>
             </div>
