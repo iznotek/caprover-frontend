@@ -256,7 +256,7 @@ class AppsTable extends Component<
                                             }}
                                         >
                                             <p>
-                                                Running: {' '}
+                                                Running:{' '}
                                                 {!enabled ? undefined : (
                                                     <span>
                                                         <CheckOutlined />

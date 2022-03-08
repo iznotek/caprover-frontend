@@ -183,9 +183,9 @@ export default class ApiManager {
                         detached ? '?detached=1' : ''
                     }`,
                     {
-                        captainDefinitionContent: 
+                        captainDefinitionContent:
                             JSON.stringify(captainDefinition),
-                        vcsHash
+                        vcsHash,
                     }
                 )
             )
@@ -245,7 +245,7 @@ export default class ApiManager {
 
         return Promise.resolve() //
             .then(
-                http.fetch(http.POST, '/user/apps/appDefinitions/toggle', { 
+                http.fetch(http.POST, '/user/apps/appDefinitions/toggle', {
                     appName,
                 })
             )

@@ -9,26 +9,26 @@ export default class RepoForm extends Component<{
     updateRepoInfo: (newRepoInfo: RepoInfo) => void
 }> {
     getPlaceHolder() {
-        switch(this.props.repoValues.type){
-            case 'git': 
-            return {
-                repo: "github.com/someone/something",
-                branch: "master",
-                user: "myemail@gmail.com",
-                password: "githubpassword"
-            }
-            case 'fossil': 
+        switch (this.props.repoValues.type) {
+            case 'git':
+                return {
+                    repo: 'github.com/someone/something',
+                    branch: 'master',
+                    user: 'myemail@gmail.com',
+                    password: 'githubpassword',
+                }
+            case 'fossil':
             default:
-            return {
-                repo: "https://www.fossil-scm.org",
-                branch: "trunk",
-                user: "whoami",
-                password: "fossilpassword"
-            }
+                return {
+                    repo: 'https://www.fossil-scm.org',
+                    branch: 'trunk',
+                    user: 'whoami',
+                    password: 'fossilpassword',
+                }
         }
     }
     render() {
-        const placeholders = this.getPlaceHolder();
+        const placeholders = this.getPlaceHolder()
         return (
             <div>
                 <form action="/" autoComplete="off">
@@ -121,11 +121,12 @@ export default class RepoForm extends Component<{
                                 }}
                             />
                         </Col>
-      
+
                         {this.props.repoValues.type == 'git' ? (
                             <Col span={24}>
                                 <span>
-                                    Or, instead of username/password, use SSH Key:
+                                    Or, instead of username/password, use SSH
+                                    Key:
                                 </span>
                                 <Input.TextArea
                                     style={{ marginBottom: 20 }}
@@ -150,9 +151,7 @@ export default class RepoForm extends Component<{
                             </Col>
                         ) : (
                             <Col span={24}>
-                                <span>
-                                    SSH is not supported right now ...
-                                </span>
+                                <span>SSH is not supported right now ...</span>
                             </Col>
                         )}
                     </Row>

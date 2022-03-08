@@ -77,7 +77,7 @@ export default abstract class UploaderPlainTextBase extends ApiComponent<
                 className="code-input"
                 placeholder={self.getPlaceHolderValue()}
                 rows={7}
-                value={self.props.text ||self.state.userEnteredValue}
+                value={self.props.text || self.state.userEnteredValue}
                 onChange={(e) => {
                     self.setState({
                         userEnteredValue: e.target.value,

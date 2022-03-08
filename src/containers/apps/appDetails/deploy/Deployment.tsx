@@ -1,5 +1,20 @@
-import { RocketOutlined, InfoCircleOutlined, SettingOutlined } from '@ant-design/icons'
-import { Modal, Button, Col, Input, message, Checkbox, Row, Tabs, Tooltip, Select } from 'antd'
+import {
+    RocketOutlined,
+    InfoCircleOutlined,
+    SettingOutlined,
+} from '@ant-design/icons'
+import {
+    Modal,
+    Button,
+    Col,
+    Input,
+    message,
+    Checkbox,
+    Row,
+    Tabs,
+    Tooltip,
+    Select,
+} from 'antd'
 import deepEqual from 'deep-equal'
 import React from 'react'
 import DomUtils from '../../../../utils/DomUtils'
@@ -63,7 +78,7 @@ export default class Deployment extends ApiComponent<
                   sshKey: '',
                   repo: '',
               }
-        this.needRepoType = this.initRepoInfo.type;
+        this.needRepoType = this.initRepoInfo.type
         this.dockerFileContent = ''
     }
 
@@ -103,7 +118,9 @@ export default class Deployment extends ApiComponent<
 
     onVersionSelected(version: IAppVersion) {
         const self = this
-        self.dockerFileContent = version.deployedDockerFile ? `${version.deployedDockerFile}` : ''
+        self.dockerFileContent = version.deployedDockerFile
+            ? `${version.deployedDockerFile}`
+            : ''
         if (version.deployedDockerFile)
             self.setState({ activeTabKey: DEPLOY_METHOD_4 })
         self.forceUpdate()
@@ -136,20 +153,20 @@ export default class Deployment extends ApiComponent<
             app.appPushWebhook && app.appPushWebhook.pushWebhookToken
 
         const repoInfoDef = {
-          type: this.needRepoType,
-          user: '',
-          password: '',
-          branch: '',
-          sshKey: '',
-          repo: '',
+            type: this.needRepoType,
+            user: '',
+            password: '',
+            branch: '',
+            sshKey: '',
+            repo: '',
         }
-        var repoInfo = app.appPushWebhook
+        let repoInfo = app.appPushWebhook
             ? app.appPushWebhook.repoInfo
             : repoInfoDef
         if (this.needRepoType != repoInfo.type) {
-          repoInfo = repoInfoDef
+            repoInfo = repoInfoDef
         }
- 
+
         const webhookPushUrlRelativePath = hasPushToken
             ? `/user/apps/webhooks/triggerbuild?namespace=captain&token=${
                   app.appPushWebhook!.pushWebhookToken
@@ -173,7 +190,7 @@ export default class Deployment extends ApiComponent<
                     appName={app.appName!}
                     key={app.appName! + '-LogsView'}
                 />
-                
+
                 <div style={{ height: 20 }} />
 
                 <AppVersionTable
@@ -197,7 +214,6 @@ export default class Deployment extends ApiComponent<
                 />
 
                 <hr />
-                
 
                 <Tabs
                     activeKey={self.state.activeTabKey}
@@ -205,38 +221,38 @@ export default class Deployment extends ApiComponent<
                         self.setState({ activeTabKey: key })
                     }}
                     style={{ minHeight: '300px', margin: 20 }}
-                    tabPosition={ this.props.isMobile ? 'top' : 'left' }
+                    tabPosition={this.props.isMobile ? 'top' : 'left'}
                 >
                     <TabPane
                         tab={
                             <span className="unselectable-span">
-                                <RocketOutlined /> 
+                                <RocketOutlined />
                                 Official CLI
                             </span>
                         }
                         key={DEPLOY_METHOD_1}
                         style={{ padding: this.props.isMobile ? 10 : 30 }}
                     >
-        
                         <Row
                             justify="start"
                             style={{ marginTop: this.props.isMobile ? 15 : 0 }}
                         >
                             <p>
-                                Use CLI deploy command. This is the easiest method as it
-                                only requires a simply command like{' '}
-                                <code>caprover deploy</code>. Read more about it in{' '}
+                                Use CLI deploy command. This is the easiest
+                                method as it only requires a simply command like{' '}
+                                <code>caprover deploy</code>. Read more about it
+                                in{' '}
                                 <NewTabLink url="https://caprover.com/docs/get-started.html#step-4-deploy-the-test-app">
                                     the docs
                                 </NewTabLink>
-                                . If you're using CI/CD to run <code>caprover deploy</code>{' '}
-                                and you do not wish to use your password, you can use{' '}
+                                . If you're using CI/CD to run{' '}
+                                <code>caprover deploy</code> and you do not wish
+                                to use your password, you can use{' '}
                                 <NewTabLink url="https://caprover.com/docs/ci-cd-integration.html#app-tokens">
                                     app-specific tokens
                                 </NewTabLink>
                                 .
                             </p>
-
                             <Col flex="0">
                                 <Button
                                     style={{
@@ -255,7 +271,8 @@ export default class Deployment extends ApiComponent<
                                                 enabled: false,
                                             }
                                         }
-                                        tokenConfig.enabled = !tokenConfig.enabled
+                                        tokenConfig.enabled =
+                                            !tokenConfig.enabled
                                         newApiData.appDefinition.appDeployTokenConfig =
                                             tokenConfig
                                         self.props.updateApiData(newApiData)
@@ -276,7 +293,8 @@ export default class Deployment extends ApiComponent<
                                 <Input
                                     onFocus={(e) => {
                                         if (
-                                            !!app.appDeployTokenConfig?.appDeployToken
+                                            !!app.appDeployTokenConfig
+                                                ?.appDeployToken
                                         ) {
                                             e.target.select()
                                             document.execCommand('copy')
@@ -288,21 +306,25 @@ export default class Deployment extends ApiComponent<
                                     }}
                                     className="code-input"
                                     readOnly={true}
-                                    disabled={!app.appDeployTokenConfig?.appDeployToken}
+                                    disabled={
+                                        !app.appDeployTokenConfig
+                                            ?.appDeployToken
+                                    }
                                     value={
                                         app.appDeployTokenConfig?.enabled
-                                            ? app.appDeployTokenConfig?.appDeployToken
+                                            ? app.appDeployTokenConfig
+                                                  ?.appDeployToken
                                             : '** Enable App Token to generate a random app token **'
                                     }
                                 />
                             </Col>
                         </Row>
                     </TabPane>
-               
+
                     <TabPane
                         tab={
                             <span className="unselectable-span">
-                                <RocketOutlined /> 
+                                <RocketOutlined />
                                 Tarball
                             </span>
                         }
@@ -310,8 +332,9 @@ export default class Deployment extends ApiComponent<
                         style={{ padding: this.props.isMobile ? 10 : 30 }}
                     >
                         <p>
-                            You can simply create a tarball (<code>.tar</code>) of your
-                            project and upload it here via upload button.
+                            You can simply create a tarball (<code>.tar</code>)
+                            of your project and upload it here via upload
+                            button.
                         </p>
 
                         <TarUploader
@@ -323,7 +346,7 @@ export default class Deployment extends ApiComponent<
                     <TabPane
                         tab={
                             <span className="unselectable-span">
-                                <RocketOutlined /> 
+                                <RocketOutlined />
                                 SCM
                             </span>
                         }
@@ -331,42 +354,42 @@ export default class Deployment extends ApiComponent<
                         style={{ padding: this.props.isMobile ? 10 : 30 }}
                     >
                         <span> Deploy from </span>
-                        <Select 
+                        <Select
                             value={repoInfo.type}
-                            style={{ width: 100 }} 
+                            style={{ width: 100 }}
                             onChange={(v) => {
                                 Modal.confirm({
-                                title: 'Change the VCS',
-                                content: (
-                                    <div>
-                                        <p>
-                                            You will move on {v} version control, <br/>
-                                            and lost any previous parameters set...
-                                        </p>
-                                        <p>
-                                            Are you sure ?
-                                        </p>
-                                    </div>
-                                ),
-                                onOk() {
-                                    self.needRepoType = v as RepoType
-                                    self.forceUpdate()
-                                },
-                                onCancel() {
-                                    self.forceUpdate()
-                                }
+                                    title: 'Change the VCS',
+                                    content: (
+                                        <div>
+                                            <p>
+                                                You will move on {v} version
+                                                control, <br />
+                                                and lost any previous parameters
+                                                set...
+                                            </p>
+                                            <p>Are you sure ?</p>
+                                        </div>
+                                    ),
+                                    onOk() {
+                                        self.needRepoType = v as RepoType
+                                        self.forceUpdate()
+                                    },
+                                    onCancel() {
+                                        self.forceUpdate()
+                                    },
                                 })
-                            }}>
+                            }}
+                        >
                             <Select.Option value="git">git</Select.Option>
                             <Select.Option value="fossil">fossil</Select.Option>
                         </Select>
-                            
-                 
+
                         <p>
-                            Enter your repository information in the form and save. Then
-                            copy the URL in the box as a webhook on Github, Bitbucket,
-                            Gitlab or as afterhook. Once you push a commit, CapRover starts a
-                            new build.
+                            Enter your repository information in the form and
+                            save. Then copy the URL in the box as a webhook on
+                            Github, Bitbucket, Gitlab or as afterhook. Once you
+                            push a commit, CapRover starts a new build.
                             <br />
                         </p>
                         <Row>
@@ -389,10 +412,12 @@ export default class Deployment extends ApiComponent<
                             />
                         </Row>
                         <br />
-                        <RepoForm 
+                        <RepoForm
                             repoValues={repoInfo}
                             updateRepoInfo={(newRepo) => {
-                                const newApiData = Utils.copyObject(this.props.apiData)
+                                const newApiData = Utils.copyObject(
+                                    this.props.apiData
+                                )
                                 if (newApiData.appDefinition.appPushWebhook) {
                                     newApiData.appDefinition.appPushWebhook.repoInfo =
                                         Utils.copyObject(newRepo)
@@ -407,11 +432,12 @@ export default class Deployment extends ApiComponent<
                         <Row
                             justify="end"
                             style={{ marginTop: this.props.isMobile ? 15 : 0 }}
-
                         >
                             <Button
                                 disabled={!hasPushToken}
-                                style={{ marginRight: this.props.isMobile ? 0 : 10 }}
+                                style={{
+                                    marginRight: this.props.isMobile ? 0 : 10,
+                                }}
                                 block={this.props.isMobile}
                                 onClick={() => {
                                     self.apiManager
@@ -425,23 +451,28 @@ export default class Deployment extends ApiComponent<
                                 Force Build
                             </Button>
                             <Button
-                                disabled={deepEqual(repoInfo, self.initRepoInfo)}
+                                disabled={deepEqual(
+                                    repoInfo,
+                                    self.initRepoInfo
+                                )}
                                 type="primary"
-                                style={{ marginTop: this.props.isMobile ? 15 : 0 }}
+                                style={{
+                                    marginTop: this.props.isMobile ? 15 : 0,
+                                }}
                                 block={this.props.isMobile}
-                                onClick={() => self.props.onUpdateConfigAndSave()}
+                                onClick={() =>
+                                    self.props.onUpdateConfigAndSave()
+                                }
                             >
                                 Save &amp; Update
                             </Button>
                         </Row>
-
                     </TabPane>
 
-                                   
                     <TabPane
                         tab={
                             <span className="unselectable-span">
-                                <RocketOutlined /> 
+                                <RocketOutlined />
                                 Dockerfile
                             </span>
                         }
@@ -455,11 +486,10 @@ export default class Deployment extends ApiComponent<
                         />
                     </TabPane>
 
-        
                     <TabPane
                         tab={
                             <span className="unselectable-span">
-                                <RocketOutlined /> 
+                                <RocketOutlined />
                                 captain-definition
                             </span>
                         }
@@ -475,7 +505,7 @@ export default class Deployment extends ApiComponent<
                     <TabPane
                         tab={
                             <span className="unselectable-span">
-                                <RocketOutlined /> 
+                                <RocketOutlined />
                                 Image Name
                             </span>
                         }
@@ -487,9 +517,8 @@ export default class Deployment extends ApiComponent<
                             onUploadSucceeded={() => self.onUploadSuccess()}
                         />
                     </TabPane>
-
                 </Tabs>
-              
+
                 <hr />
                 <div style={{ height: 20 }} />
                 <h3>
@@ -500,7 +529,9 @@ export default class Deployment extends ApiComponent<
                         <Col
                             xs={{ span: 24 }}
                             lg={{ span: 6 }}
-                            style={{ minWidth: this.props.isMobile ? '100%' : 400 }}
+                            style={{
+                                minWidth: this.props.isMobile ? '100%' : 400,
+                            }}
                         >
                             {this.props.isMobile &&
                                 'captain-definition Relative Path'}
@@ -513,9 +544,7 @@ export default class Deployment extends ApiComponent<
                                 defaultValue={
                                     app.captainDefinitionRelativeFilePath + ''
                                 }
-                                disabled={
-                                    !this.state.forceEditDeployOptions
-                                }
+                                disabled={!this.state.forceEditDeployOptions}
                                 onChange={(e) => {
                                     const newApiData = Utils.copyObject(
                                         this.props.apiData
@@ -529,11 +558,11 @@ export default class Deployment extends ApiComponent<
                         <Col>
                             <span
                                 style={{
-                                    marginLeft: 15
+                                    marginLeft: 15,
                                 }}
                             >
                                 <Tooltip title="You shouldn't need to change this path unless you have a repository with multiple captain-definition files (mono repos). Read docs for captain definition before editing this">
-                                    <InfoCircleOutlined/>
+                                    <InfoCircleOutlined />
                                 </Tooltip>
                             </span>
                         </Col>
@@ -543,7 +572,9 @@ export default class Deployment extends ApiComponent<
                         <Col
                             xs={{ span: 24 }}
                             lg={{ span: 6 }}
-                            style={{ minWidth: this.props.isMobile ? '100%' : 400 }}
+                            style={{
+                                minWidth: this.props.isMobile ? '100%' : 400,
+                            }}
                         >
                             <div
                                 style={{
@@ -551,9 +582,8 @@ export default class Deployment extends ApiComponent<
                                     marginTop: this.props.isMobile ? 8 : 0,
                                 }}
                             >
-                                {this.props.isMobile &&
-                                    'Build Without Cache'}
-                                    
+                                {this.props.isMobile && 'Build Without Cache'}
+
                                 <Checkbox
                                     checked={app.buildNoCache}
                                     disabled={
@@ -563,21 +593,21 @@ export default class Deployment extends ApiComponent<
                                         const newApiData = Utils.copyObject(
                                             this.props.apiData
                                         )
-                                        newApiData.appDefinition.buildNoCache = 
+                                        newApiData.appDefinition.buildNoCache =
                                             e.target.checked
                                         this.props.updateApiData(newApiData)
                                     }}
                                 >
                                     {!this.props.isMobile &&
-                                    'Build Without Cache'}
+                                        'Build Without Cache'}
                                 </Checkbox>
                                 <span
                                     style={{
-                                        marginLeft: 10
+                                        marginLeft: 10,
                                     }}
                                 >
                                     <Tooltip title="Do not use the docker cache if the deployment build a new image">
-                                        <InfoCircleOutlined/>
+                                        <InfoCircleOutlined />
                                     </Tooltip>
                                 </span>
                             </div>
@@ -585,20 +615,15 @@ export default class Deployment extends ApiComponent<
                     </Row>
                     <div style={{ height: 20 }} />
                     <Row justify="end">
-                        <Col >
-
+                        <Col>
                             <Tooltip title="Be sure of what you do if you decide to edit those deployment options !!">
                                 <Button
                                     type="default"
                                     block={this.props.isMobile}
-                                    disabled={
-                                        this.state
-                                            .forceEditDeployOptions
-                                    }
+                                    disabled={this.state.forceEditDeployOptions}
                                     onClick={() =>
                                         this.setState({
-                                            forceEditDeployOptions:
-                                                true,
+                                            forceEditDeployOptions: true,
                                         })
                                     }
                                 >
@@ -611,10 +636,7 @@ export default class Deployment extends ApiComponent<
                                     marginTop: this.props.isMobile ? 8 : 0,
                                 }}
                                 block={this.props.isMobile}
-                                disabled={
-                                    !this.state
-                                        .forceEditDeployOptions
-                                }
+                                disabled={!this.state.forceEditDeployOptions}
                                 type="primary"
                                 onClick={() =>
                                     self.props.onUpdateConfigAndSave()
@@ -622,7 +644,6 @@ export default class Deployment extends ApiComponent<
                             >
                                 Save &amp; Update
                             </Button>
-                            
                         </Col>
                     </Row>
                 </div>
@@ -630,5 +651,3 @@ export default class Deployment extends ApiComponent<
         )
     }
 }
-
-

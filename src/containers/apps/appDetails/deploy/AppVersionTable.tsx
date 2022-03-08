@@ -199,10 +199,10 @@ export default class AppVersionTable extends Component<{
                             onRow={(record, rowIndex) => {
                                 const self = this
                                 return {
-                                  onClick: event => {
-                                    self.props.onVersionSelected(record)
-                                  }, 
-                                };
+                                    onClick: (event) => {
+                                        self.props.onVersionSelected(record)
+                                    },
+                                }
                             }}
                         />
                     )}

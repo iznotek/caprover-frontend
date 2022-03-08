@@ -564,11 +564,22 @@ class AppDetails extends ApiComponent<
                                                 onClick={() =>
                                                     self.onToggleAppRunningState()
                                                 }
-                                                icon={app.enabled ? ( <PauseOutlined /> ) : (<StepForwardOutlined />)}
+                                                icon={
+                                                    app.enabled ? (
+                                                        <PauseOutlined />
+                                                    ) : (
+                                                        <StepForwardOutlined />
+                                                    )
+                                                }
                                             >
                                                 {!self.props.isMobile ? (
-                                                    <> {app.enabled ? ( 'Stop' ) : ( 'Run' )} </>
-                                                ):null}
+                                                    <>
+                                                        {' '}
+                                                        {app.enabled
+                                                            ? 'Stop'
+                                                            : 'Run'}{' '}
+                                                    </>
+                                                ) : undefined}
                                             </Button>
                                         </div>
                                     </Col>
